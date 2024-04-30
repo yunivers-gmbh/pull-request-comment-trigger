@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const core = require("@actions/core");
-const { context, GitHub } = require("@actions/github");
+import core from "@actions/core";
+import { context, GitHub } from "@actions/github";
 
 async function run() {
     const trigger = core.getInput("trigger", { required: true });
@@ -15,11 +15,11 @@ async function run() {
 
     const body =
         (context.eventName === "issue_comment"
-        // For comments on pull requests
-            ? context.payload.comment.body
-            // For the initial pull request description
-            : context.payload.pull_request.body) || '';
-    core.setOutput('comment_body', body);
+            ? // For comments on pull requests
+              context.payload.comment.body
+            : // For the initial pull request description
+              context.payload.pull_request.body) || "";
+    core.setOutput("comment_body", body);
 
     if (
         context.eventName === "issue_comment" &&
@@ -32,14 +32,13 @@ async function run() {
 
     const { owner, repo } = context.repo;
 
-
-    const prefixOnly = core.getInput("prefix_only") === 'true';
-    const allowArguments = core.getInput("allow_arguments") === 'true';
+    const prefixOnly = core.getInput("prefix_only") === "true";
+    const allowArguments = core.getInput("allow_arguments") === "true";
 
     let hasTrigger = body.startsWith(trigger);
 
     if (allowArguments) {
-        let regexRawTrigger = trigger.replace(/\s\*{2}/g, ' [^\\s]+');
+        let regexRawTrigger = trigger.replace(/\s\*{2}/g, " [^\\s]+");
 
         if (prefixOnly) {
             regexRawTrigger = `^${regexRawTrigger}$`;
@@ -59,14 +58,14 @@ async function run() {
 
     core.setOutput("triggered", "true");
 
-    if (allowArguments && trigger.includes('**')) {
+    if (allowArguments && trigger.includes("**")) {
         const args = [];
 
-        const triggerSplit = trigger.split(' ');
-        const bodySplit = body.split(' ');
+        const triggerSplit = trigger.split(" ");
+        const bodySplit = body.split(" ");
 
         triggerSplit.forEach((part, i) => {
-            if (part !== '**') return;
+            if (part !== "**") return;
 
             args.push(bodySplit[i]);
         });
@@ -84,19 +83,19 @@ async function run() {
             owner,
             repo,
             comment_id: context.payload.comment.id,
-            content: reaction
+            content: reaction,
         });
     } else {
         await client.reactions.createForIssue({
             owner,
             repo,
             issue_number: context.payload.pull_request.number,
-            content: reaction
+            content: reaction,
         });
     }
 }
 
-run().catch(err => {
+run().catch((err) => {
     console.error(err);
     core.setFailed("Unexpected error");
 });
