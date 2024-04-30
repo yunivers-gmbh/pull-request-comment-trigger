@@ -31008,14 +31008,14 @@ async function run() {
 
     const client = (0,_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(GITHUB_TOKEN);
     if (_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.eventName === "issue_comment") {
-        await client.reactions.createForIssueComment({
+        await client.rest.reactions.createForIssueComment({
             owner,
             repo,
             comment_id: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.comment.id,
             content: reaction,
         });
     } else {
-        await client.reactions.createForIssue({
+        await client.rest.reactions.createForIssue({
             owner,
             repo,
             issue_number: _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.pull_request.number,

@@ -78,14 +78,14 @@ async function run() {
 
     const client = getOctokit(GITHUB_TOKEN);
     if (context.eventName === "issue_comment") {
-        await client.reactions.createForIssueComment({
+        await client.rest.reactions.createForIssueComment({
             owner,
             repo,
             comment_id: context.payload.comment.id,
             content: reaction,
         });
     } else {
-        await client.reactions.createForIssue({
+        await client.rest.reactions.createForIssue({
             owner,
             repo,
             issue_number: context.payload.pull_request.number,
