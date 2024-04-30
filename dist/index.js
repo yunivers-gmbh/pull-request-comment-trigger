@@ -30935,7 +30935,6 @@ var __webpack_exports__ = {};
 
 async function run() {
     const trigger = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("trigger", { required: true });
-
     const reaction = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("reaction");
     const { GITHUB_TOKEN } = process.env;
     if (reaction && !GITHUB_TOKEN) {
@@ -31007,7 +31006,7 @@ async function run() {
         return;
     }
 
-    const client = new _actions_github__WEBPACK_IMPORTED_MODULE_1__.GitHub(GITHUB_TOKEN);
+    const client = (0,_actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit)(GITHUB_TOKEN);
     if (_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.eventName === "issue_comment") {
         await client.reactions.createForIssueComment({
             owner,

@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
 import * as core from "@actions/core";
-import { context, GitHub } from "@actions/github";
+import { context, getOctokit } from "@actions/github";
 
 async function run() {
     const trigger = core.getInput("trigger", { required: true });
-
     const reaction = core.getInput("reaction");
     const { GITHUB_TOKEN } = process.env;
     if (reaction && !GITHUB_TOKEN) {
@@ -77,7 +76,7 @@ async function run() {
         return;
     }
 
-    const client = new GitHub(GITHUB_TOKEN);
+    const client = getOctokit(GITHUB_TOKEN);
     if (context.eventName === "issue_comment") {
         await client.reactions.createForIssueComment({
             owner,
