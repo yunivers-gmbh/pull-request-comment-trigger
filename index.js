@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import core from "@actions/core";
+import * as core from "@actions/core";
 import { context, GitHub } from "@actions/github";
 
 async function run() {
